@@ -1,4 +1,4 @@
 import './js/main';
 import "./css/style.scss";
 
-console.log("Hello World!");
+console.log("This is my first e-shop");
