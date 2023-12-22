@@ -22,6 +22,7 @@ const config = {
     devServer: {
         open: true,
         host: 'localhost',
+        hot: true,
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -29,7 +30,7 @@ const config = {
             template: './src/html/index.html',
         }),
         new MiniCssExtractPlugin({
-            filename: "css/[name].css",
+            filename: "css/[name].[contenthash:5].css",
         }
         ),
     ],
@@ -49,7 +50,14 @@ const config = {
             },
             {
                 test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-                type: 'asset',
+                type: 'asset/resource',
+                generator : {
+                    filename : 'assets/[name][ext]',
+                }
+            },
+            {
+                test: /\.html$/i,
+                loader: "html-loader",
             },
 
             // Add your rules for custom modules here
