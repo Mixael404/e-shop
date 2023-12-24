@@ -17,7 +17,7 @@ const config = {
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        clean: true,
+        clean: isProduction,
     },
     devServer: {
         open: true,
@@ -67,6 +67,7 @@ const config = {
 };
 
 module.exports = () => {
+    console.log(isProduction);
     if (isProduction) {
         config.mode = 'production';
 
