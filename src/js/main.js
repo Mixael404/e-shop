@@ -1,9 +1,9 @@
 console.log("This is my first e-shop");
-
+import {setStructureToStorage, getStructureFromStorage} from "./helpers.js";
 
 class Shop {
   constructor() {
-    this.buttons = Array.from(document.querySelectorAll(".item__button"));
+    this.buttons = Array.from(document.querySelectorAll(".button"));
     this.state = {};
     this.products = [
       {
@@ -44,33 +44,90 @@ class Shop {
     ];
 
     this.basketBtn = document.getElementById('basket');
-    if (this.basketBtn.dataset.isempty == "true") {
+    this.removeItemBtns = Array.from(document.querySelectorAll('.button__minus'));
+    if (this.basketBtn.dataset.isempty === "true") {
       this.basketBtn.textContent = "Корзина";
     }
     this.addEventListeners();
+    this.init();
+  }
+
+  init(){
+    this.state = getStructureFromStorage('state') || {};
+    console.log(this.state);
+    this.updateAmountOfProducts();
+    
+    this.buttons.forEach((btn) => {
+      const buttonAmount = btn.children[1];
+      const productId = btn.closest('.item').id;
+      if(this.state.hasOwnProperty(productId)){
+        btn.children[0].classList.add("hidden");
+        buttonAmount.classList.remove("hidden");
+        buttonAmount.children[1].textContent = this.state[productId];
+      }
+    })
   }
 
   addItemTOBasket(e) {
-    const id = e.target.closest('.item').id;
-    console.log("Клик на кнопку", id);
-
+    const id = e.currentTarget.closest('.item').id;
+    const button = e.currentTarget;
+    button.children[0].classList.add("hidden");
+    const buttonAmount = button.children[1];
+    buttonAmount.classList.remove("hidden");
     if (this.state.hasOwnProperty(id)) {
       this.state[id]++;
     } else {
       this.state[id] = 1;
     }
-    console.log(this.state);
+    buttonAmount.children[1].textContent = this.state[id];
+    console.log("State: ", this.state);
+    this.updateAmountOfProducts();
+  }
+
+  removeItemFromBasket(e){
+    const minusBtn = e.currentTarget;
+    const parentBtn = minusBtn.closest('.button');
+    const id = minusBtn.closest('.item').id;
+    this.state[id]--;
+    if(this.state[id] === 0){
+      parentBtn.children[0].classList.remove('hidden');
+      parentBtn.children[1].classList.add('hidden');
+      delete this.state[id];
+    }
+    minusBtn.nextElementSibling.textContent = this.state[id];
+    e.stopPropagation();
+    console.log("State: ", this.state);
+    this.updateAmountOfProducts();
+  }
+
+  updateAmountOfProducts(){
+    const basket = this.state;
+    let total = 0;
+    for (let productId in basket){
+      total += basket[productId];
+    }
+    if (total === 0){
+      // TODO: Нужен ли вообще дата атрибут?
+      this.basketBtn.dataset.isempty = "true";
+      this.basketBtn.textContent = "Корзина";
+    } else{
+      this.basketBtn.dataset.isempty = "false";
+      this.basketBtn.textContent = total;
+    }
+    // TODO: Оставить здесь или делать при добавлении и удалении? 
+    setStructureToStorage("state", this.state);
   }
 
   addEventListeners(){
     this.buttons.forEach((btn) => {
-      console.log(btn);
       btn.addEventListener("click", this.addItemTOBasket.bind(this));
+    });
+    this.removeItemBtns.forEach((btn) => {
+      btn.addEventListener('click', this.removeItemFromBasket.bind(this));
     })
   }
 
 }
-// console.log(buttons);
 
 const shop = new Shop();
 
