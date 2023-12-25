@@ -1,6 +1,8 @@
 console.log("This is my first e-shop");
 import {setStructureToStorage, getStructureFromStorage} from "./helpers.js";
 
+// TODO: Разнести стили: создать common.scss и поместить туда header и footer(и т.п). Остальные стили в отдельные файлы
+
 class Shop {
   constructor() {
     this.buttons = Array.from(document.querySelectorAll(".button"));
@@ -126,13 +128,5 @@ class Shop {
 }
 
 const shop = new Shop();
-
-
-
-
-
-// basketBtn.addEventListener("click", (e) => {
-//   console.log("Click main basket btn");
-// })
 
 

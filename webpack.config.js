@@ -14,7 +14,7 @@ const stylesHandler = MiniCssExtractPlugin.loader;
 const config = {
     entry: {
         main: './src/index.js',
-        basket: './src/js/basket.js',
+        basket: './src/basket.js',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
