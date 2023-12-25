@@ -45,9 +45,7 @@ class Shop {
 
     this.basketBtn = document.getElementById('basket');
     this.removeItemBtns = Array.from(document.querySelectorAll('.button__minus'));
-    if (this.basketBtn.dataset.isempty === "true") {
-      this.basketBtn.textContent = "Корзина";
-    }
+
     this.addEventListeners();
     this.init();
   }
@@ -58,12 +56,12 @@ class Shop {
     this.updateAmountOfProducts();
     
     this.buttons.forEach((btn) => {
-      const buttonAmount = btn.children[1];
+      const buttonAmountBlock = btn.children[1];
       const productId = btn.closest('.item').id;
       if(this.state.hasOwnProperty(productId)){
         btn.children[0].classList.add("hidden");
-        buttonAmount.classList.remove("hidden");
-        buttonAmount.children[1].textContent = this.state[productId];
+        buttonAmountBlock.classList.remove("hidden");
+        buttonAmountBlock.children[1].textContent = this.state[productId];
       }
     })
   }
@@ -108,10 +106,8 @@ class Shop {
     }
     if (total === 0){
       // TODO: Нужен ли вообще дата атрибут?
-      this.basketBtn.dataset.isempty = "true";
       this.basketBtn.textContent = "Корзина";
     } else{
-      this.basketBtn.dataset.isempty = "false";
       this.basketBtn.textContent = total;
     }
     // TODO: Оставить здесь или делать при добавлении и удалении? 

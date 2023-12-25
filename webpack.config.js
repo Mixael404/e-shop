@@ -14,6 +14,7 @@ const stylesHandler = MiniCssExtractPlugin.loader;
 const config = {
     entry: {
         main: './src/index.js',
+        basket: './src/js/basket.js',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -28,6 +29,12 @@ const config = {
         new HtmlWebpackPlugin({
             filename: "index.html",
             template: './src/html/index.html',
+            chunks: ['main'],
+        }),
+        new HtmlWebpackPlugin({
+            filename: "basket.html",
+            template: './src/html/basket.html',
+            chunks: ['basket'],
         }),
         new MiniCssExtractPlugin({
             filename: "css/[name].[contenthash:5].css",
