@@ -1,56 +1,77 @@
 $btn-color : #CC4C6E;
-.order__title{
+*{
+    box-sizing: border-box;
+}
+.order__title {
     font-size: 48px;
 }
 
-.order__items{
+.order__items {
     margin-bottom: 50px;
 }
 
-.item{
+.item {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     padding: 16px 0;
     border-bottom: 1px solid gray;
-    min-height: 250px;
-    height: 1px;
+    height: auto;
     margin-bottom: 10px;
-    .item__leftPart{
+
+    .item__leftPart {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        .item__image{
+        margin-bottom: 30px;
+
+        .item__image {
             max-width: 250px;
-            img{
+            margin: 0 auto;
+            img {
                 width: 100%;
             }
+            @media(min-width:992px){
+                margin: 0;
+            }
         }
-        .item__textInfo{
+
+        .item__textInfo {
             margin-left: 20px;
-            .item__description{
+
+            .item__description {
                 margin-bottom: 10px;
                 font-size: 16px;
             }
-            .item__name{
+
+            .item__name {
                 font-size: 20px;
                 font-weight: bold;
                 margin-bottom: 15px;
             }
         }
+        @media(min-width:992px){
+            margin-bottom: 0;
+        }
     }
-    .item__totalCost{
+
+    .item__totalCost {
         height: 100%;
         display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        .item__amount{
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        width: 100%;
+
+        .item__amount {
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
             align-items: center;
-            .item__minus, .item__plus{
+
+            .item__minus,
+            .item__plus {
                 font-weight: bold;
                 color: black;
                 width: 30px;
@@ -62,55 +83,81 @@ $btn-color : #CC4C6E;
                 align-items: center;
                 cursor: pointer;
             }
-            .item_delete{
+
+            .item_delete {
                 font-size: 18px;
                 cursor: pointer;
             }
         }
-        .item__price{
-            .item__oldPrice{
+
+        .item__price {
+            .item__oldPrice {
                 font-size: 18px;
                 margin-bottom: 10px;
                 color: gray;
                 text-decoration: line-through;
             }
-            .item__currentPrice{
+
+            .item__currentPrice {
                 font-size: 24px;
                 color: black;
             }
         }
+
+        @media(min-width:992px){
+            flex-direction: column;
+            width: auto;
+            justify-content: space-around;
+        }
+
+    }
+
+    @media(min-width: 768px) {}
+
+    @media(min-width: 992px) {
+        min-height: 250px;
+        height: 1px;
+        flex-direction: row;
     }
 }
 
-.order__form{
+.order__form {
     margin: 0 auto;
-    width: 50%;
+    width: 100%;
     min-height: 200px;
     background-color: #4d4948;
-    padding: 10px;
+    padding: 30px;
     border-radius: 10px;
-    .form__title{
+
+    .form__title {
         font-size: 32px;
         color: white;
         font-weight: 600;
         margin-bottom: 30px;
     }
-    .form__phone{
-        width: 50%;
+
+    .form__phone {
+        width: 100%;
         padding: 10px;
         color: white;
         background-color: transparent;
         border: 1px solid rgba($color: #FFFFFF, $alpha: 0.2);
         border-radius: 10px;
         margin-bottom: 10px;
+
+        @media(min-width:992px){
+            width: 50%;
+        }
     }
-    label{
+
+    label {
         display: block;
         color: white;
         font-size: 14px;
         margin-bottom: 10px;
     }
-    .form__button{
+
+    .form__button {
         background-color: rgb(206, 4, 88);
         padding: 10px;
         border: none;
@@ -118,5 +165,8 @@ $btn-color : #CC4C6E;
         color: white;
         font-size: 16px;
         font-weight: bold;
+    }
+    @media(min-width:768px){
+        width: 50%;
     }
 }
