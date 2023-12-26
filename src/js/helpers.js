@@ -6,3 +6,13 @@ export function setStructureToStorage(key, obj){
 export function getStructureFromStorage(key){
     return JSON.parse(localStorage.getItem(key));
 }
+
+export function createElement(tag, className, content, wrapper){
+    const element = document.createElement(tag);
+    if(className){
+        element.classList.add(className);
+    }
+    element.textContent = content;
+    wrapper.append(element);
+    return element;
+}
