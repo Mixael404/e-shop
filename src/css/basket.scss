@@ -20,7 +20,9 @@ $btn-color : #CC4C6E;
     border-bottom: 1px solid gray;
     height: auto;
     margin-bottom: 10px;
-
+    .id{
+        display: none;
+    }
     .item__leftPart {
         display: flex;
         flex-wrap: wrap;
@@ -84,9 +86,11 @@ $btn-color : #CC4C6E;
                 cursor: pointer;
             }
 
-            .item_delete {
-                font-size: 18px;
+            .item__deleteBtn {
+                font-size: 24px;
+                font-weight: bold;
                 cursor: pointer;
+                margin-left: 10px;
             }
         }
 

@@ -1,11 +1,14 @@
 console.log("Basket");
-import {createElement} from './helpers.js';
-
+import {createElement,setStructureToStorage, getStructureFromStorage} from './helpers.js';
+const url = '../assets/items/1.png';
+import yrl from '../assets/items/1.png';
+console.log("URL: ", yrl);
 
 class Basket {
     constructor() {
         this.products = [
             // TODO: Разобраться с подстановкой пути файла при сборке.
+            // Сделал названия папок в src и dist разными. Теперь можно скопировать папку assets в dist и оставлять путь таким же.
             {
                 id: 1,
                 name: "Slimming Gel Body",
@@ -52,10 +55,28 @@ class Basket {
                 volume: 50,
             },
         ];
+        this.basket = getStructureFromStorage("state");
         this.productsWrapper = document.querySelector('.order__items');
-        this.products.forEach((product) => {
+        this.init();
+    }
+
+    init(){
+        this.drawTotalAmountOfProducts();
+        const order = this.constructProductsArrFromBasket();
+        order.forEach((product) => {
             this.createProductCard(product);
         })
+    }
+
+    drawTotalAmountOfProducts(){
+        // TODO: Сделать более специфичный селектор для безопасности
+        const wrapper = document.querySelector('.order__amount');
+        let total = 0;
+        for(let key in this.basket){
+            const amount = this.basket[key];
+            total += amount;
+        }
+        wrapper.textContent = total;
     }
 
     createProductCard(product){
@@ -63,27 +84,76 @@ class Basket {
         const productBody = createElement("div", "item", "", this.productsWrapper);
         const productLeftPart = createElement('div', 'item__leftPart', '', productBody);
         const productImg = createElement('div', 'item__image', '', productLeftPart);
-        
+        const id = createElement('p', 'id', product.id, productBody)
         const img = createElement('img', '', '', productImg);
         img.src = product.imgUrl;
         
         const textInfo = createElement('div', 'item__textInfo', '', productLeftPart);
         const description = createElement('div', 'item__description', product.description, textInfo);
         const name = createElement('div', 'item__name', product.name, textInfo);
-        const volume = createElement('div', 'item__volume', product.volume, textInfo);
+        const volume = createElement('div', 'item__volume', product.volume + "мл", textInfo);
         
         const totalCost = createElement('div', 'item__totalCost', '', productBody);
         const amount = createElement('div', 'item__amount', "", totalCost);
         const minus = createElement('div', 'item__minus', "-", amount);
-        const value = createElement('div', 'item__value', "1", amount);
+        const value = createElement('div', 'item__value', product.amount, amount);
         const plus = createElement('div', 'item__plus', "+", amount);
+        plus.addEventListener('click', this.addToBasket.bind(this));
+        minus.addEventListener('click', this.diffFromBasket.bind(this));
         const deleteBtn = createElement('div', 'item__deleteBtn', "×", amount);
+        deleteBtn.addEventListener('click', this.removeFromBasket.bind(this));
 
         const price = createElement('div', 'item__price', "", totalCost);
-        const oldPrice = createElement('div', 'item__oldPrice', product.oldPrice + " руб", price);
-        const newPrice = createElement('div', 'item__currentPrice', product.currentPrice + " руб", price);
+        const oldPrice = createElement('div', 'item__oldPrice', (product.oldPrice * product.amount) + " руб", price);
+        const newPrice = createElement('div', 'item__currentPrice', (product.currentPrice * product.amount) + " руб", price);
     }
 
+    constructProductsArrFromBasket(){
+        const order = [];
+        for(let key in this.basket){
+            const product = this.products.find((product) => {
+                if (product.id == key){
+                    return true;
+                }
+            })
+            product.amount = this.basket[key];
+            order.push(product);
+        }
+        return order;
+    }
+
+    getItemId(e){
+        const item = e.target.closest('.item');
+        const itemId = item.querySelector('.id').textContent;
+        return itemId;
+    }
+
+    addToBasket(e){
+        this.productsWrapper.innerHTML = '';
+        const itemId = this.getItemId(e);
+        this.basket[itemId]++;
+        setStructureToStorage("state", this.basket);
+        this.init();
+    }
+
+    diffFromBasket(e){
+        this.productsWrapper.innerHTML = '';
+        const itemId = this.getItemId(e);
+        this.basket[itemId]--;
+        if(this.basket[itemId] == 0){
+            delete this.basket[itemId];
+        }
+        setStructureToStorage("state", this.basket);
+        this.init();
+    }
+
+    removeFromBasket(e){
+        this.productsWrapper.innerHTML = '';
+        const itemId = this.getItemId(e);
+        delete this.basket[itemId];
+        setStructureToStorage("state", this.basket);
+        this.init();
+    }
 
 }
 
