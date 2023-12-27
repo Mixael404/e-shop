@@ -9,6 +9,8 @@ class Basket {
         this.products = [
             // TODO: Разобраться с подстановкой пути файла при сборке.
             // Сделал названия папок в src и dist разными. Теперь можно скопировать папку assets в dist и оставлять путь таким же.
+
+            // TODO: ВРЕМЕННО!!! Для devServer путь с .. , для сборки - с одной точкой (для совпадения пути)
             {
                 id: 1,
                 name: "Slimming Gel Body",
@@ -58,10 +60,14 @@ class Basket {
         this.basket = getStructureFromStorage("state");
         this.productsWrapper = document.querySelector('.order__items');
         this.init();
+
+
+        this.sendOrder();
     }
 
     init(){
         this.drawTotalAmountOfProducts();
+        this.setTotalCost();
         const order = this.constructProductsArrFromBasket();
         order.forEach((product) => {
             this.createProductCard(product);
@@ -153,6 +159,25 @@ class Basket {
         delete this.basket[itemId];
         setStructureToStorage("state", this.basket);
         this.init();
+    }
+
+    setTotalCost(){
+        const costWrapper = document.querySelector('.order__total');
+        const basket = this.constructProductsArrFromBasket();
+        console.log(basket);
+        let total = 0;
+        for (let product of basket){
+            total += product.currentPrice * product.amount;
+        }
+        costWrapper.textContent = "Итого: " + total + " руб";
+    }
+
+    sendOrder(){
+        const form = document.querySelector('.form');
+        console.log(form);
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+        })
     }
 
 }

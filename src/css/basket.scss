@@ -9,6 +9,12 @@ $btn-color : #CC4C6E;
 .order__items {
     margin-bottom: 50px;
 }
+.order__total{
+    color: black;
+    font-size: 30px;
+    text-align: end;
+    margin-bottom: 40px;
+}
 
 .item {
     display: flex;
