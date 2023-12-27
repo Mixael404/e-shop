@@ -1,6 +1,7 @@
 console.log("Basket");
 import { createElement, setStructureToStorage, getStructureFromStorage } from './helpers.js';
 import {products} from './products.js';
+import swal from "sweetalert2";
 
 
 const key = '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';
@@ -139,8 +140,12 @@ class Basket {
                 resString += "Количество: " + product.amount + " шт" + '<br>';
             })
 
-            if (!phone) {
-                console.log("Phone is empty");
+            if (!phone.match(/^(\+?[0-9]{1,3})?[0-9]{10}$/)) {
+                swal.fire({
+                    title: 'Ошибка',
+                    text: 'Введите корректный номер телефона',
+                    icon: 'error'
+                })
                 return;
             }
             console.log("Sending requiest...");
@@ -172,6 +177,13 @@ class Basket {
                     </body></html>`
                 })
             })
+                .then(() => {
+                    swal.fire({
+                        title: "Уведомление",
+                        text: "Ваш запрос успешно отправлен!",
+                        icon: "success"
+                    })
+                })
             
             phoneInput.value = "";
         })

@@ -3,7 +3,12 @@ $btn-color : #CC4C6E;
     box-sizing: border-box;
 }
 .order__title {
-    font-size: 48px;
+    margin-top: 40px;
+    font-size: 40px;
+    @media (min-width: 768px) {
+        margin-top: 0;
+        font-size: 48px;
+    }
 }
 
 .order__items {
@@ -78,12 +83,17 @@ $btn-color : #CC4C6E;
             gap: 12px;
             align-items: center;
 
+            .item__value{
+                font-size: 24px;
+                font-weight: bold;
+            }
+
             .item__minus,
             .item__plus {
                 font-weight: bold;
                 color: black;
-                width: 30px;
-                height: 30px;
+                width: 50px;
+                height: 50px;
                 border-radius: 50%;
                 background-color: #F6F6F6;
                 display: flex;

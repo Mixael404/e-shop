@@ -29,6 +29,7 @@
     "del-cli": "^2.0.0",
     "html-loader": "^4.2.0",
     "html-webpack-plugin": "^5.5.3",
+    "imagemin": "^8.0.1",
     "mini-css-extract-plugin": "^2.7.6",
     "postcss": "^8.4.31",
     "postcss-loader": "^7.3.3",
@@ -39,5 +40,8 @@
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"
+  },
+  "dependencies": {
+    "sweetalert2": "^11.10.2"
   }
 }
