@@ -1,62 +1,13 @@
 console.log("Basket");
-import {createElement,setStructureToStorage, getStructureFromStorage} from './helpers.js';
-const url = '../assets/items/1.png';
-import yrl from '../assets/items/1.png';
-console.log("URL: ", yrl);
+import { createElement, setStructureToStorage, getStructureFromStorage } from './helpers.js';
+import {products} from './products.js';
+
+
+const key = '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';
 
 class Basket {
     constructor() {
-        this.products = [
-            // TODO: Разобраться с подстановкой пути файла при сборке.
-            // Сделал названия папок в src и dist разными. Теперь можно скопировать папку assets в dist и оставлять путь таким же.
-
-            // TODO: ВРЕМЕННО!!! Для devServer путь с .. , для сборки - с одной точкой (для совпадения пути)
-            {
-                id: 1,
-                name: "Slimming Gel Body",
-                description: "Гель для тела для похудения",
-                imgUrl: "../assets/1.png",
-                oldPrice: 1099,
-                currentPrice: 999,
-                volume: 50,
-            },
-            {
-                id: 2,
-                name: "Slimming Gel Body",
-                description: "Гель для тела для похудения",
-                imgUrl: "../assets/2.png",
-                oldPrice: 999,
-                currentPrice: 899,
-                volume: 50,
-            },
-            {
-                id: 3,
-                name: "Slimming Gel Body",
-                description: "Гель для тела для похудения",
-                imgUrl: "../assets/3.png",
-                oldPrice: 1299,
-                currentPrice: 1199,
-                volume: 50,
-            },
-            {
-                id: 4,
-                name: "Slimming Gel Body",
-                description: "Гель для тела для похудения",
-                imgUrl: "../assets/4.png",
-                oldPrice: 599,
-                currentPrice: 499,
-                volume: 50,
-            },
-            {
-                id: 5,
-                name: "Slimming Gel Body",
-                description: "Гель для тела для похудения",
-                imgUrl: "../assets/5.png",
-                oldPrice: 399,
-                currentPrice: 349,
-                volume: 50,
-            },
-        ];
+        this.products = products;
         this.basket = getStructureFromStorage("state");
         this.productsWrapper = document.querySelector('.order__items');
         this.init();
@@ -65,7 +16,7 @@ class Basket {
         this.sendOrder();
     }
 
-    init(){
+    init() {
         this.drawTotalAmountOfProducts();
         this.setTotalCost();
         const order = this.constructProductsArrFromBasket();
@@ -74,18 +25,18 @@ class Basket {
         })
     }
 
-    drawTotalAmountOfProducts(){
+    drawTotalAmountOfProducts() {
         // TODO: Сделать более специфичный селектор для безопасности
         const wrapper = document.querySelector('.order__amount');
         let total = 0;
-        for(let key in this.basket){
+        for (let key in this.basket) {
             const amount = this.basket[key];
             total += amount;
         }
         wrapper.textContent = total;
     }
 
-    createProductCard(product){
+    createProductCard(product) {
         // TODO: Отрефакторить функцию
         const productBody = createElement("div", "item", "", this.productsWrapper);
         const productLeftPart = createElement('div', 'item__leftPart', '', productBody);
@@ -93,12 +44,12 @@ class Basket {
         const id = createElement('p', 'id', product.id, productBody)
         const img = createElement('img', '', '', productImg);
         img.src = product.imgUrl;
-        
+
         const textInfo = createElement('div', 'item__textInfo', '', productLeftPart);
         const description = createElement('div', 'item__description', product.description, textInfo);
         const name = createElement('div', 'item__name', product.name, textInfo);
         const volume = createElement('div', 'item__volume', product.volume + "мл", textInfo);
-        
+
         const totalCost = createElement('div', 'item__totalCost', '', productBody);
         const amount = createElement('div', 'item__amount', "", totalCost);
         const minus = createElement('div', 'item__minus', "-", amount);
@@ -114,11 +65,11 @@ class Basket {
         const newPrice = createElement('div', 'item__currentPrice', (product.currentPrice * product.amount) + " руб", price);
     }
 
-    constructProductsArrFromBasket(){
+    constructProductsArrFromBasket() {
         const order = [];
-        for(let key in this.basket){
+        for (let key in this.basket) {
             const product = this.products.find((product) => {
-                if (product.id == key){
+                if (product.id == key) {
                     return true;
                 }
             })
@@ -128,13 +79,13 @@ class Basket {
         return order;
     }
 
-    getItemId(e){
+    getItemId(e) {
         const item = e.target.closest('.item');
         const itemId = item.querySelector('.id').textContent;
         return itemId;
     }
 
-    addToBasket(e){
+    addToBasket(e) {
         this.productsWrapper.innerHTML = '';
         const itemId = this.getItemId(e);
         this.basket[itemId]++;
@@ -142,18 +93,18 @@ class Basket {
         this.init();
     }
 
-    diffFromBasket(e){
+    diffFromBasket(e) {
         this.productsWrapper.innerHTML = '';
         const itemId = this.getItemId(e);
         this.basket[itemId]--;
-        if(this.basket[itemId] == 0){
+        if (this.basket[itemId] == 0) {
             delete this.basket[itemId];
         }
         setStructureToStorage("state", this.basket);
         this.init();
     }
 
-    removeFromBasket(e){
+    removeFromBasket(e) {
         this.productsWrapper.innerHTML = '';
         const itemId = this.getItemId(e);
         delete this.basket[itemId];
@@ -161,25 +112,94 @@ class Basket {
         this.init();
     }
 
-    setTotalCost(){
+    setTotalCost() {
         const costWrapper = document.querySelector('.order__total');
         const basket = this.constructProductsArrFromBasket();
         console.log(basket);
         let total = 0;
-        for (let product of basket){
+        for (let product of basket) {
             total += product.currentPrice * product.amount;
         }
         costWrapper.textContent = "Итого: " + total + " руб";
     }
 
-    sendOrder(){
+    sendOrder() {
         const form = document.querySelector('.form');
         console.log(form);
+
         form.addEventListener('submit', (e) => {
             e.preventDefault();
+            const phoneInput = form.querySelector('.form__phone');
+            const phone = phoneInput.value;
+            const order = this.constructProductsArrFromBasket();
+            let resString = '';
+            order.forEach((product) => {
+                resString += "id: " + product.id + "; ";
+                resString += "Название: " + product.name + "; ";
+                resString += "Количество: " + product.amount + " шт" + '<br>';
+            })
+
+            if (!phone) {
+                console.log("Phone is empty");
+                return;
+            }
+            console.log("Sending requiest...");
+
+            fetch('https://api.brevo.com/v3/smtp/email', {
+                method: "POST",
+                headers: {
+                    "accept": "application/json",
+                    "api-key": "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",
+                    "content-type": "application/json"
+                },
+                body: JSON.stringify({
+                    "sender": {
+                        "name": "Shop's client",
+                        "email": "senderalex@example.com"
+                    },
+                    "to": [
+                        {
+                            "email": "slutskij.m.a@gmail.com",
+                            "name": "Mikhail"
+                        }
+                    ],
+                    "subject": "New order!",
+                    "htmlContent": `<html><head></head><body><p>Новый заказ:</p>
+                    <p>Скорее перезвоните заказчику!</p>
+                    <p>Телефон: ${phone}</p>
+                    <p><strong>Детали заказа:</strong></p>
+                    <p>${resString}</p>
+                    </body></html>`
+                })
+            })
+            
+            phoneInput.value = "";
         })
     }
 
 }
 
 const basket = new Basket();
+
+// fetch('https://api.brevo.com/v3/smtp/email', {
+//     method: "POST",
+//     headers: {
+//         "accept": "application/json",
+//         "api-key": "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",
+//         "content-type": "application/json"
+//     },
+//     body: JSON.stringify({
+//         "sender": {
+//             "name": "Shop's client",
+//             "email": "senderalex@example.com"
+//         },
+//         "to": [
+//             {
+//                 "email": "slutskij.m.a@gmail.com",
+//                 "name": "Mikhail"
+//             }
+//         ],
+//         "subject": "New order!",
+//         "htmlContent": "<html><head></head><body><p>Hello,</p>Новый заказ состоит из товаров: .</p></body></html>"
+//     })
+// })

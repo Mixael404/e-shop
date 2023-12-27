@@ -1,69 +1,39 @@
 console.log("This is my first e-shop");
-import {setStructureToStorage, getStructureFromStorage} from "./helpers.js";
+import { setStructureToStorage, getStructureFromStorage, createElement } from "./helpers.js";
+import {products} from './products.js';
+console.log(products);
 
 class Shop {
   constructor() {
-    this.buttons = Array.from(document.querySelectorAll(".button"));
+    // this.buttons = Array.from(document.querySelectorAll(".button"));
     this.state = {};
-    this.products = [
-      {
-        id: 1,
-        name: "iPhone 14 Pro Max",
-        description: "The most advanced iPhone ever",
-        oldPrice: 1099,
-        currentPrice: 999,
-      },
-      {
-        id: 2,
-        name: "Samsung Galaxy S23 Ultra",
-        description: "The best Android phone on the market",
-        oldPrice: 999,
-        currentPrice: 899,
-      },
-      {
-        id: 3,
-        name: "MacBook Pro M2",
-        description: "The most powerful MacBook ever",
-        oldPrice: 1299,
-        currentPrice: 1199,
-      },
-      {
-        id: 4,
-        name: "iPad Air 5",
-        description: "The most versatile iPad ever",
-        oldPrice: 599,
-        currentPrice: 499,
-      },
-      {
-        id: 5,
-        name: "Apple Watch Series 8",
-        description: "The most advanced Apple Watch ever",
-        oldPrice: 399,
-        currentPrice: 349,
-      },
-    ];
+    this.products = products;
 
     this.basketBtn = document.getElementById('basket');
-    this.removeItemBtns = Array.from(document.querySelectorAll('.button__minus'));
+    // this.removeItemBtns = Array.from(document.querySelectorAll('.button__minus'));
+    this.itemsWrapper = document.querySelector('.items__body');
 
-    this.addEventListeners();
+    // this.addEventListeners();
     this.init();
+    this.products.forEach((product) => {
+      this.createProductCards(product);
+    })
   }
 
-  init(){
+  init() {
     this.state = getStructureFromStorage('state') || {};
     console.log(this.state);
     this.updateAmountOfProducts();
-    
-    this.buttons.forEach((btn) => {
-      const buttonAmountBlock = btn.children[1];
-      const productId = btn.closest('.item').id;
-      if(this.state.hasOwnProperty(productId)){
-        btn.children[0].classList.add("hidden");
-        buttonAmountBlock.classList.remove("hidden");
-        buttonAmountBlock.children[1].textContent = this.state[productId];
-      }
-    })
+
+    // this.buttons.forEach((btn) => {
+    //   const buttonAmountBlock = btn.children[1];
+    //   const productId = btn.closest('.item').id;
+    //   if (this.state.hasOwnProperty(productId)) {
+    //     btn.children[0].classList.add("hidden");
+    //     buttonAmountBlock.classList.remove("hidden");
+    //     buttonAmountBlock.children[1].textContent = this.state[productId];
+    //   }
+    // })
   }
 
   addItemTOBasket(e) {
@@ -82,12 +52,12 @@ class Shop {
     this.updateAmountOfProducts();
   }
 
-  removeItemFromBasket(e){
+  removeItemFromBasket(e) {
     const minusBtn = e.currentTarget;
     const parentBtn = minusBtn.closest('.button');
     const id = minusBtn.closest('.item').id;
     this.state[id]--;
-    if(this.state[id] === 0){
+    if (this.state[id] === 0) {
       parentBtn.children[0].classList.remove('hidden');
       parentBtn.children[1].classList.add('hidden');
       delete this.state[id];
@@ -98,31 +68,68 @@ class Shop {
     this.updateAmountOfProducts();
   }
 
-  updateAmountOfProducts(){
+  updateAmountOfProducts() {
     const basket = this.state;
     let total = 0;
-    for (let productId in basket){
+    for (let productId in basket) {
       total += basket[productId];
     }
-    if (total === 0){
+    if (total === 0) {
       // TODO: Нужен ли вообще дата атрибут?
       this.basketBtn.textContent = "Корзина";
-    } else{
+    } else {
       this.basketBtn.textContent = total;
     }
     // TODO: Оставить здесь или делать при добавлении и удалении? 
     setStructureToStorage("state", this.state);
   }
 
-  addEventListeners(){
-    this.buttons.forEach((btn) => {
-      btn.addEventListener("click", this.addItemTOBasket.bind(this));
-    });
-    this.removeItemBtns.forEach((btn) => {
-      btn.addEventListener('click', this.removeItemFromBasket.bind(this));
-    })
-  }
+  // addEventListeners() {
+  //   this.buttons.forEach((btn) => {
+  //     btn.addEventListener("click", this.addItemTOBasket.bind(this));
+  //   });
+  //   this.removeItemBtns.forEach((btn) => {
+  //     btn.addEventListener('click', this.removeItemFromBasket.bind(this));
+  //   })
+  // }
 
+  createProductCards(product) {
+    // TODO: Отрефакторить функцию
+    const item = createElement('div', 'item', '', this.itemsWrapper, product.id);
+
+    const itemImg = createElement('div', 'item__image', '', item);
+    const img = createElement('img', '', '', itemImg);
+    img.src = product.imgUrl;
+
+    const name = createElement('div', 'item__name', product.name, item);
+
+    const info = createElement('div', 'item__info', '', item);
+    const description = createElement('div', 'item__description', product.description, info);
+    const price = createElement('div', 'item__price', '', info);
+    const currentPrice = createElement('div', 'item__current-price', product.currentPrice + ' руб', price);
+    const oldPrice = createElement('div', 'item__old-price', product.oldPrice + ' руб', price);
+
+    const btn = createElement('button', 'button', '', item);
+    const btnText = createElement('div', 'button__text', 'В корзину', btn);
+    const btnAmount = createElement('div', 'button__amount', '', btn);
+
+    
+    const btnMinus = createElement('div', 'button__minus', '-', btnAmount);
+    btnMinus.addEventListener('click', this.removeItemFromBasket.bind(this));
+
+    let value;
+    if (this.state.hasOwnProperty(product.id)){
+      btnText.classList.add('hidden');
+      value = this.state[product.id];
+    } else{
+      btnAmount.classList.add('hidden');
+      value = 0;
+    }
+    const btnValue = createElement('div', 'button__value', value, btnAmount);
+
+    const btnPlus = createElement('div', 'button__plus', '+', btnAmount);
+    btn.addEventListener('click', this.addItemTOBasket.bind(this));
+  }
 }
 
 const shop = new Shop();
