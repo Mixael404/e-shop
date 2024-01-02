@@ -1,9 +1,13 @@
+// import img1 from '../assets/items/1.png';
+// import img2 from '../assets/items/2.png';
+// import img3 from '../assets/items/3.png';
+// import img4 from '../assets/items/4.png';
+// import img5 from '../assets/items/5.png';
 import img1 from '../assets/items/1.png';
 import img2 from '../assets/items/2.png';
 import img3 from '../assets/items/3.png';
 import img4 from '../assets/items/4.png';
 import img5 from '../assets/items/5.png';
-
 
 const products = [
     {

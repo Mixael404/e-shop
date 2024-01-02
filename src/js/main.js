@@ -48,7 +48,6 @@ class Shop {
       this.state[id] = 1;
     }
     buttonAmount.children[1].textContent = this.state[id];
-    console.log("State: ", this.state);
     this.updateAmountOfProducts();
   }
 
@@ -61,10 +60,10 @@ class Shop {
       parentBtn.children[0].classList.remove('hidden');
       parentBtn.children[1].classList.add('hidden');
       delete this.state[id];
+    } else{
+      minusBtn.nextElementSibling.textContent = this.state[id];
     }
-    minusBtn.nextElementSibling.textContent = this.state[id];
     e.stopPropagation();
-    console.log("State: ", this.state);
     this.updateAmountOfProducts();
   }
 
@@ -75,7 +74,6 @@ class Shop {
       total += basket[productId];
     }
     if (total === 0) {
-      // TODO: Нужен ли вообще дата атрибут?
       this.basketBtn.textContent = "Корзина";
     } else {
       this.basketBtn.textContent = total;

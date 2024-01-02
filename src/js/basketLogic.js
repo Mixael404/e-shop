@@ -1,20 +1,20 @@
 console.log("Basket");
 import { createElement, setStructureToStorage, getStructureFromStorage } from './helpers.js';
-import {products} from './products.js';
-import swal from "sweetalert2";
-
-
-const key = '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';
+import { products } from './products.js';
+import { key } from '../env.js';
+// import swal from "sweetalert";
 
 class Basket {
     constructor() {
         this.products = products;
         this.basket = getStructureFromStorage("state");
         this.productsWrapper = document.querySelector('.order__items');
+        this.modal = document.querySelector('.modal');
+        const modalBtn = this.modal.querySelector('.modal__btn');
+        modalBtn.addEventListener('click', () => {
+            this.modal.classList.add('hidden');
+        })
         this.init();
-
-
-        this.sendOrder();
     }
 
     init() {
@@ -24,6 +24,7 @@ class Basket {
         order.forEach((product) => {
             this.createProductCard(product);
         })
+        this.addListenerToForm();
     }
 
     drawTotalAmountOfProducts() {
@@ -116,7 +117,6 @@ class Basket {
     setTotalCost() {
         const costWrapper = document.querySelector('.order__total');
         const basket = this.constructProductsArrFromBasket();
-        console.log(basket);
         let total = 0;
         for (let product of basket) {
             total += product.currentPrice * product.amount;
@@ -124,37 +124,46 @@ class Basket {
         costWrapper.textContent = "Итого: " + total + " руб";
     }
 
-    sendOrder() {
-        const form = document.querySelector('.form');
-        console.log(form);
+    constractEmailBody(order){
+        let resString = '';
+        order.forEach((product) => {
+            resString += "id: " + product.id + "; ";
+            resString += "Название: " + product.name + "; ";
+            resString += "Количество: " + product.amount + " шт" + '<br>';
+        })
+        return resString;
+    }
 
+    checkPhoneNumber(phone){
+        const phoneCorrect = phone.match(/^(\+?[0-9]{1,3})?[0-9]{10}$/);
+        if (!phoneCorrect) {
+            this.modal.classList.remove('hidden');
+            this.fillModalWindow('phoneError');
+        }
+        return phoneCorrect;
+    }
+
+    addListenerToForm() {
+        const form = document.querySelector('.form');
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             const phoneInput = form.querySelector('.form__phone');
             const phone = phoneInput.value;
             const order = this.constructProductsArrFromBasket();
-            let resString = '';
-            order.forEach((product) => {
-                resString += "id: " + product.id + "; ";
-                resString += "Название: " + product.name + "; ";
-                resString += "Количество: " + product.amount + " шт" + '<br>';
-            })
+            
+            const emailBody = this.constractEmailBody(order);
 
-            if (!phone.match(/^(\+?[0-9]{1,3})?[0-9]{10}$/)) {
-                swal.fire({
-                    title: 'Ошибка',
-                    text: 'Введите корректный номер телефона',
-                    icon: 'error'
-                })
+            const phoneCorrect = this.checkPhoneNumber(phone);
+            if (!phoneCorrect) {
+                phoneInput.value = '';
                 return;
             }
-            console.log("Sending requiest...");
 
             fetch('https://api.brevo.com/v3/smtp/email', {
                 method: "POST",
                 headers: {
                     "accept": "application/json",
-                    "api-key": "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",
+                    "api-key": key,
                     "content-type": "application/json"
                 },
                 body: JSON.stringify({
@@ -168,50 +177,43 @@ class Basket {
                             "name": "Mikhail"
                         }
                     ],
-                    "subject": "New order!",
+                    "subject": "Новый заказ!",
                     "htmlContent": `<html><head></head><body><p>Новый заказ:</p>
                     <p>Скорее перезвоните заказчику!</p>
                     <p>Телефон: ${phone}</p>
                     <p><strong>Детали заказа:</strong></p>
-                    <p>${resString}</p>
+                    <p>${emailBody}</p>
                     </body></html>`
                 })
             })
                 .then(() => {
-                    swal.fire({
-                        title: "Уведомление",
-                        text: "Ваш запрос успешно отправлен!",
-                        icon: "success"
-                    })
+                    // alert('Успешно!');
+                    this.modal.classList.remove('hidden');
+                    this.fillModalWindow('success');
                 })
-            
+                .catch(() => {
+                    // alert('Error!');
+                    this.fillModalWindow('error');
+                })
+
             phoneInput.value = "";
         })
     }
 
+    fillModalWindow(type){
+        const title = this.modal.querySelector('.modal__title');
+        const description = this.modal.querySelector('.modal__description');
+        if(type === 'success'){
+            title.textContent = 'Success';
+            description.textContent = 'Successful requiest! We will call you in nearest 15 minutes'
+        } else if(type === "error"){
+            title.textContent = 'Error';
+            description.textContent = 'Something wrong. Please try later';
+        } else if(type === "phoneError"){
+            title.textContent = 'Error';
+            description.textContent = 'Please fill correct phone number.';
+        }
+    }
 }
 
 const basket = new Basket();
-
-// fetch('https://api.brevo.com/v3/smtp/email', {
-//     method: "POST",
-//     headers: {
-//         "accept": "application/json",
-//         "api-key": "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",
-//         "content-type": "application/json"
-//     },
-//     body: JSON.stringify({
-//         "sender": {
-//             "name": "Shop's client",
-//             "email": "senderalex@example.com"
-//         },
-//         "to": [
-//             {
-//                 "email": "slutskij.m.a@gmail.com",
-//                 "name": "Mikhail"
-//             }
-//         ],
-//         "subject": "New order!",
-//         "htmlContent": "<html><head></head><body><p>Hello,</p>Новый заказ состоит из товаров: .</p></body></html>"
-//     })
-// })
