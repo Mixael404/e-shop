@@ -13,6 +13,8 @@ class Basket {
         const modalBtn = this.modal.querySelector('.modal__btn');
         modalBtn.addEventListener('click', () => {
             this.modal.classList.add('hidden');
+            modalBtn.classList.remove('success');
+            modalBtn.classList.remove('error');
         })
         this.init();
     }
@@ -188,8 +190,8 @@ class Basket {
             })
                 .then(() => {
                     // alert('Успешно!');
-                    this.modal.classList.remove('hidden');
                     this.fillModalWindow('success');
+                    this.modal.classList.remove('hidden');
                 })
                 .catch(() => {
                     // alert('Error!');
@@ -203,15 +205,19 @@ class Basket {
     fillModalWindow(type){
         const title = this.modal.querySelector('.modal__title');
         const description = this.modal.querySelector('.modal__description');
+        const btn = this.modal.querySelector('.modal__btn');
         if(type === 'success'){
             title.textContent = 'Success';
-            description.textContent = 'Successful requiest! We will call you in nearest 15 minutes'
+            description.textContent = 'Successful requiest! We will call you in nearest 15 minutes';
+            btn.classList.add('success');
         } else if(type === "error"){
             title.textContent = 'Error';
             description.textContent = 'Something wrong. Please try later';
+            btn.classList.add('error');
         } else if(type === "phoneError"){
             title.textContent = 'Error';
             description.textContent = 'Please fill correct phone number.';
+            btn.classList.add('error');
         }
     }
 }

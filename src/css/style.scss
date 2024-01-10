@@ -139,6 +139,18 @@ $btn-color : #CC4C6E;
     .items__title {
         font-size: 28px;
         margin-bottom: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 20px;
+
+        select{
+            padding: 5px;
+            font-size: 16px;
+        }
+        select:focus{
+            border: none;
+        }
     }
 
     .items__body {

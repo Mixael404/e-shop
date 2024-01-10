@@ -12,19 +12,23 @@ class Shop {
     this.basketBtn = document.getElementById('basket');
     // this.removeItemBtns = Array.from(document.querySelectorAll('.button__minus'));
     this.itemsWrapper = document.querySelector('.items__body');
-
-    // this.addEventListeners();
+    this.sorter = document.querySelector('.sorter');
+    console.log(this.sorter);
+    this.addEventListeners();
     this.init();
-    this.products.forEach((product) => {
-      this.createProductCards(product);
-    })
+    // this.products.forEach((product) => {
+    //   this.createProductCards(product);
+    // })
   }
 
   init() {
     this.state = getStructureFromStorage('state') || {};
     console.log(this.state);
+    const sortMode = localStorage.getItem('sortMode') || "popular";
+    this.sorter.value = sortMode;
+    this.sortProducts(sortMode);
     this.updateAmountOfProducts();
-
+    
     // this.buttons.forEach((btn) => {
     //   const buttonAmountBlock = btn.children[1];
     //   const productId = btn.closest('.item').id;
@@ -34,6 +38,31 @@ class Shop {
     //     buttonAmountBlock.children[1].textContent = this.state[productId];
     //   }
     // })
+  }
+
+
+  sortProducts(mode){
+    switch(mode){
+      case 'popular':
+        this.products.sort((a,b) => a.id - b.id);
+        break;
+      case 'cheap':
+        this.products.sort((a,b) => a.currentPrice - b.currentPrice);
+        break;
+      case 'expensive':
+        this.products.sort((a,b) => b.currentPrice - a.currentPrice);
+        break;
+      default:
+        this.products.sort((a,b) => a.id - b.id);
+        break;
+    }
+
+  
+    this.itemsWrapper.innerHTML = '';
+    this.products.forEach((product) => {
+      this.createProductCards(product);
+    })
+    
   }
 
   addItemTOBasket(e) {
@@ -82,14 +111,16 @@ class Shop {
     setStructureToStorage("state", this.state);
   }
 
-  // addEventListeners() {
-  //   this.buttons.forEach((btn) => {
-  //     btn.addEventListener("click", this.addItemTOBasket.bind(this));
-  //   });
-  //   this.removeItemBtns.forEach((btn) => {
-  //     btn.addEventListener('click', this.removeItemFromBasket.bind(this));
-  //   })
-  // }
+  addEventListeners() {
+    this.sorter.addEventListener('change', this.changeSortMode.bind(this));
+  }
+
+  changeSortMode(e){
+    console.log('select');
+    const mode = this.sorter.value;
+    localStorage.setItem('sortMode', mode);
+    this.sortProducts(mode);
+  }
 
   createProductCards(product) {
     // TODO: Отрефакторить функцию
@@ -128,6 +159,8 @@ class Shop {
     const btnPlus = createElement('div', 'button__plus', '+', btnAmount);
     btn.addEventListener('click', this.addItemTOBasket.bind(this));
   }
+
+  
 }
 
 const shop = new Shop();
