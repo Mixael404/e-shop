@@ -145,11 +145,12 @@ $btn-color : #CC4C6E;
         gap: 20px;
 
         select{
-            padding: 5px;
+            padding: 8px;
             font-size: 16px;
+            border: 1px solid black;
         }
         select:focus{
-            border: none;
+            border: 1px solid black;
         }
     }
 
@@ -207,6 +208,7 @@ $btn-color : #CC4C6E;
             .item__old-price {
                 color: #BCBCBC;
                 font-size: 14px;
+                text-decoration: line-through;
             }
         }
     }
