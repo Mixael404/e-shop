@@ -65,8 +65,8 @@ class Basket {
         deleteBtn.addEventListener('click', this.removeFromBasket.bind(this));
 
         const price = createElement('div', 'item__price', "", totalCost);
-        const oldPrice = createElement('div', 'item__oldPrice', (product.oldPrice * product.amount) + " руб", price);
-        const newPrice = createElement('div', 'item__currentPrice', (product.currentPrice * product.amount) + " руб", price);
+        const oldPrice = createElement('div', 'item__oldPrice', (product.oldPrice * product.amount) + " RUB", price);
+        const newPrice = createElement('div', 'item__currentPrice', (product.currentPrice * product.amount) + " RUB", price);
     }
 
     constructProductsArrFromBasket() {
@@ -123,7 +123,7 @@ class Basket {
         for (let product of basket) {
             total += product.currentPrice * product.amount;
         }
-        costWrapper.textContent = "Итого: " + total + " руб";
+        costWrapper.textContent = "Total: " + total + " RUB";
     }
 
     constractEmailBody(order){

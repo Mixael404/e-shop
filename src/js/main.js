@@ -103,7 +103,7 @@ class Shop {
       total += basket[productId];
     }
     if (total === 0) {
-      this.basketBtn.textContent = "Корзина";
+      this.basketBtn.textContent = "Basket";
     } else {
       this.basketBtn.textContent = total;
     }
@@ -135,11 +135,11 @@ class Shop {
     const info = createElement('div', 'item__info', '', item);
     const description = createElement('div', 'item__description', product.description, info);
     const price = createElement('div', 'item__price', '', info);
-    const currentPrice = createElement('div', 'item__current-price', product.currentPrice + ' руб', price);
-    const oldPrice = createElement('div', 'item__old-price', product.oldPrice + ' руб', price);
+    const currentPrice = createElement('div', 'item__current-price', product.currentPrice + ' RUB', price);
+    const oldPrice = createElement('div', 'item__old-price', product.oldPrice + ' RUB', price);
 
     const btn = createElement('button', 'button', '', item);
-    const btnText = createElement('div', 'button__text', 'В корзину', btn);
+    const btnText = createElement('div', 'button__text', 'Add to basket', btn);
     const btnAmount = createElement('div', 'button__amount', '', btn);
 
     

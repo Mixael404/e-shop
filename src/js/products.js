@@ -12,8 +12,8 @@ import img5 from '../assets/items/5.png';
 const products = [
     {
       id: 1,
-      name: "Первый гель",
-      description: "Гель для тела для похудения",
+      name: "First gel",
+      description: "Gel for body",
       imgUrl: img1,
       oldPrice: 1099,
       currentPrice: 999,
@@ -21,8 +21,8 @@ const products = [
     },
     {
       id: 2,
-      name: "Второй гель",
-      description: "Гель для тела для похудения",
+      name: "Second gel",
+      description: "Gel for hands",
       imgUrl: img2,
       oldPrice: 999,
       currentPrice: 899,
@@ -30,8 +30,8 @@ const products = [
     },
     {
       id: 3,
-      name: "Третий гель",
-      description: "Гель для тела для похудения",
+      name: "Third gel",
+      description: "Gel for body",
       imgUrl: img3,
       oldPrice: 1299,
       currentPrice: 1199,
@@ -39,8 +39,8 @@ const products = [
     },
     {
       id: 4,
-      name: "Четвёртый гель",
-      description: "Гель для тела для похудения",
+      name: "Fourth gel",
+      description: "Gel for steps",
       imgUrl: img4,
       oldPrice: 599,
       currentPrice: 499,
@@ -48,8 +48,8 @@ const products = [
     },
     {
       id: 5,
-      name: "Пятый гель",
-      description: "Гель для тела для похудения",
+      name: "Fifth gel",
+      description: "Gel for hands",
       imgUrl: img5,
       oldPrice: 399,
       currentPrice: 349,
