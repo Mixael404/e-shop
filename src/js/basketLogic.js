@@ -136,12 +136,9 @@ class Basket {
         return resString;
     }
 
+    // isValidPhone(phone)
     checkPhoneNumber(phone){
         const phoneCorrect = phone.match(/^(\+?[0-9]{1,3})?[0-9]{10}$/);
-        if (!phoneCorrect) {
-            this.modal.classList.remove('hidden');
-            this.fillModalWindow('phoneError');
-        }
         return phoneCorrect;
     }
 
@@ -156,8 +153,11 @@ class Basket {
             const emailBody = this.constractEmailBody(order);
 
             const phoneCorrect = this.checkPhoneNumber(phone);
+         
             if (!phoneCorrect) {
                 phoneInput.value = '';
+                this.modal.classList.remove('hidden');
+                this.fillModalWindow('phoneError');
                 return;
             }
 
@@ -189,11 +189,13 @@ class Basket {
                 })
             })
                 .then(() => {
+                    console.log('THEN');
                     // alert('Успешно!');
                     this.fillModalWindow('success');
                     this.modal.classList.remove('hidden');
                 })
                 .catch(() => {
+                    console.log('CATCH');
                     // alert('Error!');
                     this.fillModalWindow('error');
                 })

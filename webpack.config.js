@@ -25,7 +25,7 @@ const config = {
     devServer: {
         open: true,
         host: 'localhost',
-        // hot: true,
+        hot: true,
     },
     plugins: [
         new HtmlWebpackPlugin({
