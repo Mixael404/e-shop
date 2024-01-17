@@ -11,7 +11,7 @@ const product = products.find((prod) => {
         return true;
     }
 })
-
+const buttonWrapper = document.querySelector('.buttonWrapper');
 const state = getStructureFromStorage('state');
 let currentAmount = state[id] ?? 0;
 console.log("Amount: " + currentAmount);
@@ -30,38 +30,53 @@ function createProductInfo() {
     createButton();
 }
 
-// TODO: Доделать функционал кнопки
+// TODO: Переделать логику функции,использовать класс + сделать логику чище.
 function createButton() {
     const button = document.querySelector('.button');
-    if (currentAmount === 0) {
-        button.textContent = 'Add to basket';
-        button.addEventListener('click', changeBasket);
-    } else {
-        const buttonAmount = createElement('div', 'button__amount', '', button);
-        const buttonMinus = createElement('div', 'button__minus', '-', buttonAmount);
-        const buttonValue = createElement('div', 'button__amount', '', buttonAmount);
-        const buttonPlus = createElement('div', 'button__plus', '+', buttonAmount);
+    button.addEventListener('click', addToBasket);
+    const buttonAmount = createElement('div', 'button__amount', '', button);
+    const buttonMinus = createElement('div', 'button__minus', '-', buttonAmount);
+    const buttonValue = createElement('div', 'button__value', '', buttonAmount);
+    const buttonPlus = createElement('div', 'button__plus', '+', buttonAmount);
 
+    buttonMinus.addEventListener('click', changeBasket);
+    buttonPlus.addEventListener('click', changeBasket);
+
+    if (currentAmount === 0) {
+        buttonAmount.classList.add('hidden');
+        button.textContent = 'Add to basket';
+    } else {
         buttonValue.textContent = currentAmount;
-        // console.log("This :", this);
-        buttonMinus.addEventListener('click', changeBasket);
-        buttonPlus.addEventListener('click', changeBasket);
     }
 }
 
-function changeBasket(e){
-    if(e.target.classList.contains("button__minus")){
+function changeBasket(e) {
+    if (e.target.classList.contains("button__minus")) {
         currentAmount--;
-    } else{
+    } else {
         currentAmount++;
     }
+    const btnControls = e.target.closest('.button__amount');
+    const value = btnControls.querySelector('.button__value');
+    value.textContent = currentAmount;
     state[id] = currentAmount;
+    console.log(btnControls);
+    if (currentAmount == 0) {
+        e.target.closest('.button').remove();
+        delete state[id];
+        createElement('button', 'button', '', buttonWrapper);
+        createButton();
+    }
     setStructureToStorage('state', state);
-    e.target.closest('.button__amount').remove();
-    // removeEventListener('')
-    createButton();
 }
 
+
+function addToBasket(e) {
+    if (e.currentTarget.textContent !== "Add to basket") return;
+    e.currentTarget.textContent = "";
+    currentAmount = 1;
+    createButton();
+}
 
 createProductInfo();
 console.log(product);
