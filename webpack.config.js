@@ -17,6 +17,7 @@ const config = {
     entry: {
         main: './src/index.js',
         basket: './src/basket.js',
+        product: './src/product.js',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -25,7 +26,7 @@ const config = {
     devServer: {
         open: true,
         host: 'localhost',
-        // hot: true,
+        hot: true,
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -37,6 +38,11 @@ const config = {
             filename: "basket.html",
             template: './src/html/basket.html',
             chunks: ['basket'],
+        }),
+        new HtmlWebpackPlugin({
+            filename: "product.html",
+            template: './src/html/product.html',
+            chunks: ['product'],
         }),
         new MiniCssExtractPlugin({
             filename: "css/[name].[contenthash:5].css",
