@@ -5,25 +5,17 @@ console.log(products);
 
 class Shop {
   constructor() {
-    // this.buttons = Array.from(document.querySelectorAll(".button"));
     this.state = {};
     this.products = products;
-
     this.basketBtn = document.getElementById('basket');
-    // this.removeItemBtns = Array.from(document.querySelectorAll('.button__minus'));
     this.itemsWrapper = document.querySelector('.items__body');
     this.sorter = document.querySelector('.sorter');
-    console.log(this.sorter);
     this.addEventListeners();
     this.init();
-    // this.products.forEach((product) => {
-    //   this.createProductCards(product);
-    // })
   }
 
   init() {
     this.state = getStructureFromStorage('state') || {};
-    console.log(this.state);
     const sortMode = localStorage.getItem('sortMode') || "popular";
     this.sorter.value = sortMode;
     this.sortProducts(sortMode);
@@ -112,6 +104,8 @@ class Shop {
   }
 
   addEventListeners() {
+    const catalogBtn = document.querySelector('.CTA__button');
+    catalogBtn.addEventListener("click", this.scrollToCatalog.bind(this));
     this.sorter.addEventListener('change', this.changeSortMode.bind(this));
   }
 
@@ -126,13 +120,14 @@ class Shop {
     // TODO: Отрефакторить функцию
     const item = createElement('div', 'item', '', this.itemsWrapper, product.id);
 
-    const itemImg = createElement('div', 'item__image', '', item);
+    const itemInfoWrapper = createElement('div', 'item_wrapper', '', item);
+
+    const itemImg = createElement('div', 'item__image', '', itemInfoWrapper);
     const img = createElement('img', '', '', itemImg);
     img.src = product.imgUrl;
 
-    const name = createElement('div', 'item__name', product.name, item);
-
-    const info = createElement('div', 'item__info', '', item);
+    const name = createElement('div', 'item__name', product.name, itemInfoWrapper);
+    const info = createElement('div', 'item__info', '', itemInfoWrapper);
     const description = createElement('div', 'item__description', product.description, info);
     const price = createElement('div', 'item__price', '', info);
     const currentPrice = createElement('div', 'item__current-price', product.currentPrice + ' RUB', price);
@@ -155,12 +150,22 @@ class Shop {
       value = 0;
     }
     const btnValue = createElement('div', 'button__value', value, btnAmount);
-
     const btnPlus = createElement('div', 'button__plus', '+', btnAmount);
+
+
     btn.addEventListener('click', this.addItemTOBasket.bind(this));
+    itemInfoWrapper.addEventListener('click', (e) => {
+      window.location.href = `product.html?id=${product.id}`;
+    })
   }
 
-  
+  scrollToCatalog(){
+    const catalog = document.getElementById('catalog');
+    catalog.scrollIntoView({
+      behavior: "smooth",
+    });
+  }
+
 }
 
 const shop = new Shop();
