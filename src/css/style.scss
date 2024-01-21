@@ -218,29 +218,39 @@ $btn-color : #CC4C6E;
         }
     }
 
-    .button {
-        background-color: $btn-color;
-        color: white;
-        font-size: 16px;
-        font-weight: bold;
-        padding: 10px;
-        border: none;
-        border-radius: 10px;
-        display: block;
-        margin: 0 auto;
-        width: 100%;
+    // @media screen and (-webkit-min-device-pixel-ratio:0) { 
+    //     select,
+    //     textarea,
+    //     input,
+    //     .button {
+    //       font-size: 16px;
+    //       background-color: tomato !important;
+    //     }
+    //   }
 
-        .button__amount{
-            display: flex;
-            flex-wrap: nowrap;
-            justify-content: space-between;
-            align-items: center;
-            .button__minus, .button__plus{
-                padding: 10px 15px;
-                font-size: 24px;
-            }
-        }
-    }
+    // .button {
+    //     background-color: $btn-color;
+    //     color: white;
+    //     font-size: 16px;
+    //     font-weight: bold;
+    //     padding: 10px;
+    //     border: none;
+    //     border-radius: 10px;
+    //     display: block;
+    //     margin: 0 auto;
+    //     width: 100%;
+
+    //     .button__amount{
+    //         display: flex;
+    //         flex-wrap: nowrap;
+    //         justify-content: space-between;
+    //         align-items: center;
+    //         .button__minus, .button__plus{
+    //             padding: 10px 15px;
+    //             font-size: 24px;
+    //         }
+    //     }
+    // }
 }
 
 .newsletter {

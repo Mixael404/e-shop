@@ -3,7 +3,12 @@ $btn-color : #CC4C6E;
 
 .productBlock{
     .itemName{
-        font-size: 48px;
+        font-size: 36px;
+        margin-top: 30px;
+        @media (min-width: 768px){
+            font-size: 48px;
+            margin-top: 0;
+        }
     }
     .infoWrapper{
         display: flex;
@@ -31,30 +36,28 @@ $btn-color : #CC4C6E;
                 font-size: 28px;
                 font-weight: 600;
             }
-            .button {
-                background-color: $btn-color;
-                color: white;
-                font-size: 16px;
-                font-weight: bold;
-                padding: 10px;
-                border: none;
-                border-radius: 10px;
-                width: 100%;
+            // .button {
+            //     background-color: $btn-color;
+            //     color: white;
+            //     font-size: 16px;
+            //     font-weight: bold;
+            //     padding: 10px;
+            //     border: none;
+            //     border-radius: 10px;
+            //     width: 100%;
         
-                .button__amount{
-                    display: flex;
-                    flex-wrap: nowrap;
-                    justify-content: space-between;
-                    align-items: center;
-                    .button__minus, .button__plus{
-                        padding: 10px 15px;
-                        font-size: 24px;
-                    }
-                }
-            }
+            //     .button__amount{
+            //         display: flex;
+            //         flex-wrap: nowrap;
+            //         justify-content: space-between;
+            //         align-items: center;
+            //         .button__minus, .button__plus{
+            //             padding: 10px 15px;
+            //             font-size: 24px;
+            //         }
+            //     }
+            // }
         }
-
-
         @media (min-width: 768px){
             .imgWrapper{
                 width: calc(40% - 50px);
@@ -70,8 +73,6 @@ $btn-color : #CC4C6E;
                     width: 50%;
                 }
             }
-
-            
         }
     }
 }

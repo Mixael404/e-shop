@@ -11,7 +11,6 @@ const product = products.find((prod) => {
         return true;
     }
 })
-const buttonWrapper = document.querySelector('.buttonWrapper');
 const state = getStructureFromStorage('state');
 let currentAmount = state[id] ?? 0;
 console.log("Amount: " + currentAmount);
@@ -30,7 +29,6 @@ function createProductInfo() {
     createButton();
 }
 
-// TODO: Переделать логику функции,использовать класс + сделать логику чище.
 function createButton() {
     const wrapper = document.querySelector('.buttonWrapper');
 
@@ -43,9 +41,6 @@ function createButton() {
     buttonMinus.addEventListener('click', diffFromBasket);
     const buttonValue = createElement('div', 'button__value', '', buttonAmount);
     const buttonPlus = createElement('div', 'button__plus', '+', buttonAmount);
-
-    // buttonMinus.addEventListener('click', changeBasket);
-    // buttonPlus.addEventListener('click', changeBasket);
 
     if (currentAmount === 0) {
         buttonAmount.classList.add('hidden');
@@ -77,39 +72,44 @@ function createButton() {
 //     setStructureToStorage('state', state);
 // }
 
-    function addItemTOBasket(e){
-        const button = e.currentTarget;
-        if(currentAmount == 0){
-            button.children[0].classList.add('hidden');
-            button.children[1].classList.remove('hidden');
-        }
-        currentAmount++;
-        const valueWrp = button.children[1].children[1];
-        valueWrp.textContent = currentAmount;
-        state[id] = currentAmount;
-        setStructureToStorage('state', state);
+function addItemTOBasket(e) {
+    const button = e.currentTarget;
+    if (currentAmount == 0) {
+        button.children[0].classList.add('hidden');
+        button.children[1].classList.remove('hidden');
+    }
+    currentAmount++;
+    const valueWrp = button.children[1].children[1];
+    valueWrp.textContent = currentAmount;
+    state[id] = currentAmount;
+    setStructureToStorage('state', state);
+}
+
+function diffFromBasket(e) {
+    const button = e.currentTarget;
+    const mainBtn = button.closest('.button');
+    console.log(mainBtn);
+    const valueWrp = mainBtn.children[1].children[1];
+    currentAmount--;
+    valueWrp.textContent = currentAmount;
+    state[id] = currentAmount;
+
+
+    if (currentAmount == 0) {
+        mainBtn.children[0].classList.remove('hidden');
+        mainBtn.children[1].classList.add('hidden');
+        delete state[id];
     }
 
-    function diffFromBasket(e){
-        const button = e.currentTarget;
-        const mainBtn = button.closest('.button');
-        console.log(mainBtn);
-        const valueWrp = mainBtn.children[1].children[1];
-        currentAmount--;
-        valueWrp.textContent = currentAmount;
-        state[id] = currentAmount;
+    setStructureToStorage('state', state);
+    e.stopPropagation();
+}
 
+const backBtn = document.getElementById('basket');
+backBtn.addEventListener('click', () => {
+    window.history.back();
+})
 
-        if(currentAmount == 0){
-            mainBtn.children[0].classList.remove('hidden');
-            mainBtn.children[1].classList.add('hidden');
-            // mainBtn.textContent = "Add to basket";
-            delete state[id];
-        }
-
-        setStructureToStorage('state', state);
-        e.stopPropagation();
-    }
 
 createProductInfo();
 console.log(product);

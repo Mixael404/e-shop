@@ -5,19 +5,13 @@ console.log(products);
 
 class Shop {
   constructor() {
-    // this.buttons = Array.from(document.querySelectorAll(".button"));
     this.state = {};
     this.products = products;
-
     this.basketBtn = document.getElementById('basket');
-    // this.removeItemBtns = Array.from(document.querySelectorAll('.button__minus'));
     this.itemsWrapper = document.querySelector('.items__body');
     this.sorter = document.querySelector('.sorter');
     this.addEventListeners();
     this.init();
-    // this.products.forEach((product) => {
-    //   this.createProductCards(product);
-    // })
   }
 
   init() {
@@ -110,6 +104,8 @@ class Shop {
   }
 
   addEventListeners() {
+    const catalogBtn = document.querySelector('.CTA__button');
+    catalogBtn.addEventListener("click", this.scrollToCatalog.bind(this));
     this.sorter.addEventListener('change', this.changeSortMode.bind(this));
   }
 
@@ -163,7 +159,13 @@ class Shop {
     })
   }
 
-  
+  scrollToCatalog(){
+    const catalog = document.getElementById('catalog');
+    catalog.scrollIntoView({
+      behavior: "smooth",
+    });
+  }
+
 }
 
 const shop = new Shop();

@@ -1,3 +1,6 @@
+$btn-color : #CC4C6E;
+
+
 h1,
 h2,
 h3,
@@ -8,12 +11,16 @@ a {
     margin: 0;
 }
 
+html {
+    -webkit-touch-callout: none;
+}
+
 a {
     color: #000000;
     text-decoration: none;
 }
 
-.hidden{
+.hidden {
     display: none !important;
 }
 
@@ -26,6 +33,33 @@ section,
 header,
 footer {
     margin-bottom: 20px;
+}
+.button {
+    background-color: $btn-color;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+
+    .button__amount{
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: center;
+        .button__minus, .button__plus{
+            padding: 10px 15px;
+            font-size: 24px;
+        }
+    }
+}
+
+.button{
+    -webkit-touch-callout: none;
 }
 
 header {
